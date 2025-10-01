@@ -28,11 +28,11 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
-
-.env
-.application.properties
-.application.yml
-.application-prod.properties
+#
+#.env
+#.application.properties
+#.application.yml
+#.application-prod.properties
 
 ### VS Code ###
 .vscode/
