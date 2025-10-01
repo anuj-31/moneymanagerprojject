@@ -2,7 +2,6 @@ package com.project.moneymanager.service;
 
 import com.project.moneymanager.dto.ExpenseDTO;
 import com.project.moneymanager.entity.ProfileEntity;
-import com.project.moneymanager.repository.ExpenseRepository;
 import com.project.moneymanager.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
