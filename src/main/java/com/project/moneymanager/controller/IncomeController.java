@@ -10,26 +10,30 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
 
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/incomes")
 public class IncomeController {
-private final IncomeService incomeService;
+
+    private final IncomeService incomeService;
+
     @PostMapping
-    public ResponseEntity<IncomeDTO> addIncome(@RequestBody IncomeDTO dto){
+    public ResponseEntity<IncomeDTO> addExpense(@RequestBody IncomeDTO dto) {
         IncomeDTO saved = incomeService.addIncome(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }
 
-    }
     @GetMapping
-    public ResponseEntity<List<IncomeDTO>>getIncomes(){
-        List<IncomeDTO> incomes = incomeService.getCurrentMonthIncomesForCurrentUser();
-        return ResponseEntity.ok(incomes);
+    public ResponseEntity<List<IncomeDTO>> getExpenses() {
+        List<IncomeDTO> expenses = incomeService.getCurrentMonthIncomesForCurrentUser();
+        return ResponseEntity.ok(expenses);
     }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void>deleteIncome(@PathVariable Long id){
+    public ResponseEntity<Void> deleteIncome(@PathVariable Long id) {
         incomeService.deleteIncome(id);
         return ResponseEntity.noContent().build();
     }
 }
+

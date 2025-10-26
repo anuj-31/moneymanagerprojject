@@ -23,7 +23,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class IncomeService {
     private final CategoryRepository categoryRepository;
-
     private final IncomeRepository incomeRepository;
     private final ProfileService profileService;
 
@@ -37,7 +36,7 @@ public class IncomeService {
         return toDTO(newExpense);
     }
 
-    // Retrieves all expenses for current month/based on the start date and end date
+    // Retrieves all incomes for current month/based on the start date and end date
     public List<IncomeDTO> getCurrentMonthIncomesForCurrentUser() {
         ProfileEntity profile = profileService.getCurrentProfile();
         LocalDate now = LocalDate.now();
@@ -47,7 +46,7 @@ public class IncomeService {
         return list.stream().map(this::toDTO).toList();
     }
 
-    //delete expense by id for current user
+    //delete income by id for current user
     public void deleteIncome(Long incomeId) {
         ProfileEntity profile = profileService.getCurrentProfile();
         IncomeEntity entity = incomeRepository.findById(incomeId)
@@ -57,7 +56,6 @@ public class IncomeService {
         }
         incomeRepository.delete(entity);
     }
-    //get latest 5 expenses for curr user
 
     // Get latest 5 incomes for current user
     public List<IncomeDTO> getLatest5IncomesForCurrentUser() {
@@ -65,12 +63,14 @@ public class IncomeService {
         List<IncomeEntity> list = incomeRepository.findTop5ByProfileIdOrderByDateDesc(profile.getId());
         return list.stream().map(this::toDTO).toList();
     }
+
     // Get total incomes for current user
     public BigDecimal getTotalIncomeForCurrentUser() {
         ProfileEntity profile = profileService.getCurrentProfile();
-        BigDecimal total = incomeRepository.findTotalIncomeByProfileId(profile.getId());
+        BigDecimal total = incomeRepository.findTotalExpenseByProfileId(profile.getId());
         return total != null ? total: BigDecimal.ZERO;
     }
+
     //filter incomes
     public List<IncomeDTO> filterIncomes(LocalDate startDate, LocalDate endDate, String keyword, Sort sort) {
         ProfileEntity profile = profileService.getCurrentProfile();
@@ -78,8 +78,8 @@ public class IncomeService {
         return list.stream().map(this::toDTO).toList();
     }
 
-    //helper methoid
-    private IncomeEntity toEntity(IncomeDTO dto, ProfileEntity profile, CategoryEntity category){
+    //helper methods
+    private IncomeEntity toEntity(IncomeDTO dto, ProfileEntity profile, CategoryEntity category) {
         return IncomeEntity.builder()
                 .name(dto.getName())
                 .icon(dto.getIcon())
@@ -88,7 +88,6 @@ public class IncomeService {
                 .profile(profile)
                 .category(category)
                 .build();
-
     }
 
     private IncomeDTO toDTO(IncomeEntity entity) {

@@ -11,13 +11,15 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Entity
-@Table(name="tbl_expenses")
+@Table(name = "tbl_expenses")
 public class ExpenseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -46,5 +48,4 @@ public class ExpenseEntity {
             this.date = LocalDate.now();
         }
     }
-
 }

@@ -13,11 +13,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Entity
-@Table(name="tbl_incomes")
+@Table(name = "tbl_incomes")
 public class IncomeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,3 +48,4 @@ public class IncomeEntity {
         }
     }
 }
+

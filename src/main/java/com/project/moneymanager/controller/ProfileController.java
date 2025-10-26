@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-
 @RestController
 @RequiredArgsConstructor
 public class ProfileController {
@@ -50,10 +49,9 @@ public class ProfileController {
         }
     }
 
-//    @GetMapping("/profile")
-//    public ResponseEntity<ProfileDTO> getPublicProfile() {
-//        ProfileDTO profileDTO = profileService.getPublicProfile(null);
-//        return ResponseEntity.ok(profileDTO);
-//    }
+    @GetMapping("/profile")
+    public ResponseEntity<ProfileDTO> getPublicProfile() {
+        ProfileDTO profileDTO = profileService.getPublicProfile(null);
+        return ResponseEntity.ok(profileDTO);
+    }
 }
-

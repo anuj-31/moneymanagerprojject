@@ -1,7 +1,13 @@
 package com.project.moneymanager.service;
+import com.project.moneymanager.dto.ExpenseDTO;
+import com.project.moneymanager.dto.IncomeDTO;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.SimpleMailMessage;
@@ -31,16 +37,14 @@ public class EmailService {
         }
     }
 
-//    public void sendEmailWithAttachment(String to, String subject, String body, byte[] attachment, String filename) throws MessagingException {
-//        MimeMessage message = mailSender.createMimeMessage();
-//        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-//        helper.setFrom(fromEmail);
-//        helper.setTo(to);
-//        helper.setSubject(subject);
-//        helper.setText(body);
-//        helper.addAttachment(filename, new ByteArrayResource(attachment));
-//        mailSender.send(message);
-//    }
+    public void sendEmailWithAttachment(String to, String subject, String body, byte[] attachment, String filename) throws MessagingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setFrom(fromEmail);
+        helper.setTo(to);
+        helper.setSubject(subject);
+        helper.setText(body);
+        helper.addAttachment(filename, new ByteArrayResource(attachment));
+        mailSender.send(message);
+    }
 }
-
-

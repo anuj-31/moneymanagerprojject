@@ -32,10 +32,15 @@ public class JwtUtil {
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 10)) // 10 hours
+                // 100 hours
+                .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 100))
+                // 100 hours?
                 .signWith(this.signingKey, SignatureAlgorithm.HS256)
                 .compact();
     }
+
+
+
 
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()

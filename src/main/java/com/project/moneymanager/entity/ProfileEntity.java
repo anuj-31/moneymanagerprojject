@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
+
 @Entity
 @Table(name = "tbl_profiles")
 @Data

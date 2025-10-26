@@ -39,7 +39,7 @@ public class NotificationService {
         }
         log.info("Job completed: sendDailyIncomeExpenseReminder()");
     }
-//
+
     @Scheduled(cron = "0 0 23 * * *", zone = "IST")
     public void sendDailyExpenseSummary() {
         log.info("Job started: sendDailyExpenseSummary()");
@@ -53,14 +53,11 @@ public class NotificationService {
                 int i = 1;
                 for(ExpenseDTO expense : todaysExpenses) {
                     table.append("<tr>");
-                    table.append("<td style='border:1px solid hsla(0, 0%, 87%, 1.00);padding:8px;'>").append(i++).append("</td>");
-                    table.append("<td style='border:1px solid hsla(0, 0%, 87%, 1.00);padding:8px;'>").append(expense.getName()).append("</td>");
-                    table.append("<td style='border:1px solid rgba(221,221,221,1);padding:8px;'>").append(expense.getAmount()).append("</td>");
-                    table.append("<td style='border:1px solid rgba(221, 221, 221, 1);padding:8px;'>")
-                            .append(expense.getCategoryId() != null ? expense.getCategoryName() : "N/A")
-                            .append("</td>");
+                    table.append("<td style='border:1px solid #ddd;padding:8px;'>").append(i++).append("</td>");
+                    table.append("<td style='border:1px solid #ddd;padding:8px;'>").append(expense.getName()).append("</td>");
+                    table.append("<td style='border:1px solid #ddd;padding:8px;'>").append(expense.getAmount()).append("</td>");
+                    table.append("<td style='border:1px solid #ddd;padding:8px;'>").append(expense.getCategoryId() != null ? expense.getCategoryName() : "N/A").append("</td>");
                     table.append("</tr>");
-
                 }
                 table.append("</table>");
                 String body = "Hi "+profile.getFullName()+",<br/><br/> Here is a summary of your expenses for today:<br/><br/>"+table+"<br/><br/>Best regards,<br/>Money Manager Team";
