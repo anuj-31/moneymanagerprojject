@@ -62,18 +62,17 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // Replace with your frontend URLs
         configuration.setAllowedOrigins(List.of(
-                "http://localhost:5173",  // local dev
-                "https://your-frontend-deployed-url.com" // production
+                "http://localhost:5173"  // your local frontend
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
-        configuration.setAllowCredentials(true); // needed for JWT/auth headers
+        configuration.setAllowCredentials(false); // JWT in header does NOT need cookies
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 
     @Bean
     public AuthenticationManager authenticationManager() {
