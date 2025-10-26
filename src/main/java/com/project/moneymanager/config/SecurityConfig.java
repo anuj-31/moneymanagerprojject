@@ -22,6 +22,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
+
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -31,17 +32,27 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.cors(Customizer.withDefaults())
+        httpSecurity
+                // Enable CORS with custom config
+                .cors(Customizer.withDefaults())
+                // Disable CSRF for API-only app
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/status", "/health", "/register", "/activate", "/login")
-                        .permitAll()
-                        .anyRequest().authenticated())
+                        // Public endpoints
+                        .requestMatchers(
+                                "/", "/status", "/health",
+                                "/auth/signup", "/auth/login", "/auth/activate"
+                        ).permitAll()
+                        // All other endpoints require authentication
+                        .anyRequest().authenticated()
+                )
+                // Stateless session (JWT)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // Add JWT filter
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
         return httpSecurity.build();
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -51,10 +62,14 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("*"));
+        // Replace with your frontend URLs
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:5173",  // local dev
+                "https://your-frontend-deployed-url.com" // production
+        ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("Authorization","Content-Type", "Accept"));
-        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
+        configuration.setAllowCredentials(true); // needed for JWT/auth headers
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

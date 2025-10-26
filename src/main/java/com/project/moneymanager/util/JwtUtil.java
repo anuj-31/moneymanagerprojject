@@ -18,27 +18,21 @@ public class JwtUtil {
 
     private final Key signingKey;
 
-    // Constructor initializes signingKey once
     public JwtUtil(@Value("${jwt.secret}") String secretValue) {
         byte[] keyBytes;
-
         try {
-            // Try to decode as Base64 (if valid Base64 string)
             keyBytes = Base64.getDecoder().decode(secretValue);
         } catch (IllegalArgumentException e) {
-            // If not valid Base64, fall back to UTF-8 bytes
             keyBytes = secretValue.getBytes(StandardCharsets.UTF_8);
         }
-
         this.signingKey = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // Generate token (10 hours validity)
     public String generateToken(String email) {
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 10)) // 10 hours
                 .signWith(this.signingKey, SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -57,7 +51,6 @@ public class JwtUtil {
 
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        Date expiration = extractAllClaims(token).getExpiration();
-        return username.equals(userDetails.getUsername()) && expiration.after(new Date());
+        return username.equals(userDetails.getUsername()) && extractAllClaims(token).getExpiration().after(new Date());
     }
 }
