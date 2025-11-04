@@ -4,10 +4,6 @@ import com.project.moneymanager.dto.IncomeDTO;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.SimpleMailMessage;
@@ -32,8 +28,9 @@ public class EmailService {
             message.setSubject(subject);
             message.setText(body);
             mailSender.send(message);
+            System.out.println("✅ Email sent successfully to: " + to);
         }catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            System.err.println("❌ Failed to send email: " + e.getMessage());
         }
     }
 

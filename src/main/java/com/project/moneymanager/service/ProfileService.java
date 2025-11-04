@@ -31,27 +31,15 @@ public class ProfileService {
     @Value("${app.activation.url}")
     private String activationURL;
 
-    @Value("${spring.mail.username:}")
-    private String mailUsername; // optional check
-
     public ProfileDTO registerProfile(ProfileDTO profileDTO) {
         ProfileEntity newProfile = toEntity(profileDTO);
         newProfile.setActivationToken(UUID.randomUUID().toString());
         newProfile = profileRepository.save(newProfile);
-
-        // --- Send activation email only if email is configured ---
-        if (mailUsername != null && !mailUsername.isBlank()) {
-            try {
-                String activationLink = activationURL + "/api/v1.0/activate?token=" + newProfile.getActivationToken();
-                String subject = "Activate your Money Manager account";
-                String body = "Click on the following link to activate your account: " + activationLink;
-                emailService.sendEmail(newProfile.getEmail(), subject, body);
-            } catch (Exception e) {
-                // Log error but do not break registration
-                System.err.println("Failed to send activation email: " + e.getMessage());
-            }
-        }
-
+        //send activation email
+        String activationLink = activationURL+"/api/v1.0/activate?token=" + newProfile.getActivationToken();
+        String subject = "Activate your Money Manager account";
+        String body = "Click on the following link to activate your account: " + activationLink;
+        emailService.sendEmail(newProfile.getEmail(), subject, body);
         return toDTO(newProfile);
     }
 
@@ -97,15 +85,17 @@ public class ProfileService {
     public ProfileEntity getCurrentProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return profileRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new UsernameNotFoundException(
-                        "Profile not found with email: " + authentication.getName()));
+                .orElseThrow(() -> new UsernameNotFoundException("Profile not found with email: " + authentication.getName()));
     }
 
     public ProfileDTO getPublicProfile(String email) {
-        ProfileEntity currentUser = (email == null) ? getCurrentProfile()
-                : profileRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(
-                        "Profile not found with email: " + email));
+        ProfileEntity currentUser = null;
+        if (email == null) {
+            currentUser = getCurrentProfile();
+        }else {
+            currentUser = profileRepository.findByEmail(email)
+                    .orElseThrow(() -> new UsernameNotFoundException("Profile not found with email: " + email));
+        }
 
         return ProfileDTO.builder()
                 .id(currentUser.getId())
@@ -119,13 +109,9 @@ public class ProfileService {
 
     public Map<String, Object> authenticateAndGenerateToken(AuthDTO authDTO) {
         try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authDTO.getEmail(), authDTO.getPassword())
-            );
-
-            // Generate JWT token
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authDTO.getEmail(), authDTO.getPassword()));
+            //Generate JWT token
             String token = jwtUtil.generateToken(authDTO.getEmail());
-
             return Map.of(
                     "token", token,
                     "user", getPublicProfile(authDTO.getEmail())
@@ -135,3 +121,5 @@ public class ProfileService {
         }
     }
 }
+
+

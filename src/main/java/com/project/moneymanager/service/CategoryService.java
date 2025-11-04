@@ -7,8 +7,11 @@ import com.project.moneymanager.entity.ProfileEntity;
 import com.project.moneymanager.repository.CategoryRepository;
 import jdk.jfr.Category;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -77,3 +80,4 @@ public class CategoryService {
 
     }
 }
+

@@ -1,38 +1,58 @@
-HELP.md
-#target/
+# -------------------
+# Maven / Java
+# -------------------
+target/
 .mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/maven-wrapper.properties
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### STS ###
+# -------------------
+# Spring / Environment
+# -------------------
+.env
+*.properties
+*.yml
+*.application.properties
+*.application.yml
+*.application-prod.properties
+
+# -------------------
+# IDEs
+# -------------------
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# Eclipse / STS
 .apt_generated
 .classpath
 .factorypath
 .project
-.settings
+.settings/
 .springBeans
-.sts4-cache
+.sts4-cache/
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
+# NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
+/build/
 !**/src/main/**/build/
 !**/src/test/**/build/
-#
-#.env
-#.application.properties
-#.application.yml
-#.application-prod.properties
 
-### VS Code ###
+# VS Code
 .vscode/
+
+# -------------------
+# OS / Misc
+# -------------------
+.DS_Store
+Thumbs.db

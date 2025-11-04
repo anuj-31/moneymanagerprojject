@@ -3,6 +3,7 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<!-- Spring Boot Parent -->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -10,16 +11,19 @@
 		<relativePath/>
 	</parent>
 
+	<!-- Project Info -->
 	<groupId>in.bushansirgur</groupId>
 	<artifactId>moneymanager</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>moneymanager</name>
 	<description>Demo project for Spring Boot</description>
 
+	<!-- Java Version -->
 	<properties>
 		<java.version>17</java.version>
 	</properties>
 
+	<!-- Dependencies -->
 	<dependencies>
 		<!-- Spring Boot Starters -->
 		<dependency>
@@ -50,10 +54,7 @@
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-mail</artifactId>
-		</dependency>
+
 		<!-- Lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -81,7 +82,7 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- Apache POI -->
+		<!-- Apache POI for Excel -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
@@ -89,9 +90,10 @@
 		</dependency>
 	</dependencies>
 
+	<!-- Build Plugins -->
 	<build>
 		<plugins>
-			<!-- Compiler Plugin with Annotation Processing -->
+			<!-- Compiler Plugin for Java 17 & Lombok Annotation Processing -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

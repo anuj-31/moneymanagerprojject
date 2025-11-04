@@ -1,7 +1,9 @@
 package com.project.moneymanager.controller;
 import com.project.moneymanager.service.DashboardService;
+import com.project.moneymanager.service.ExcelService;
 import com.project.moneymanager.service.ExpenseService;
 import com.project.moneymanager.service.IncomeService;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +17,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class ExcelController {
 
-    private final DashboardService.ExcelService excelService;
+    private final ExcelService excelService;
     private final IncomeService incomeService;
     private final ExpenseService expenseService;
 
@@ -33,3 +35,4 @@ public class ExcelController {
         excelService.writeExpensesToExcel(response.getOutputStream(), expenseService.getCurrentMonthExpensesForCurrentUser());
     }
 }
+

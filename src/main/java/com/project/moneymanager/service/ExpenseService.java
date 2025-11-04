@@ -10,7 +10,6 @@ import com.project.moneymanager.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -108,3 +107,4 @@ public class ExpenseService {
                 .build();
     }
 }
+
