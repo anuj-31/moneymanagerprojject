@@ -16,30 +16,31 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
-    private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
 
-    @Value("${app.activation.url}")
+
+    @Value("${app.activation.url:}")
     private String activationURL;
 
     public ProfileDTO registerProfile(ProfileDTO profileDTO) {
         ProfileEntity newProfile = toEntity(profileDTO);
-        newProfile.setActivationToken(UUID.randomUUID().toString());
+
+        newProfile.setIsActive(true);
+
+        newProfile.setActivationToken(null);
+
+
         newProfile = profileRepository.save(newProfile);
-        //send activation email
-        String activationLink = activationURL+"/api/v1.0/activate?token=" + newProfile.getActivationToken();
-        String subject = "Activate your Money Manager account";
-        String body = "Click on the following link to activate your account: " + activationLink;
-        emailService.sendEmail(newProfile.getEmail(), subject, body);
+
+
         return toDTO(newProfile);
     }
 
@@ -52,6 +53,8 @@ public class ProfileService {
                 .profileImageUrl(profileDTO.getProfileImageUrl())
                 .createdAt(profileDTO.getCreatedAt())
                 .updatedAt(profileDTO.getUpdatedAt())
+                // ✅ Active by default
+                .isActive(true)
                 .build();
     }
 
@@ -66,20 +69,14 @@ public class ProfileService {
                 .build();
     }
 
+    // ✅ This is no longer used, but keep it if needed
     public boolean activateProfile(String activationToken) {
-        return profileRepository.findByActivationToken(activationToken)
-                .map(profile -> {
-                    profile.setIsActive(true);
-                    profileRepository.save(profile);
-                    return true;
-                })
-                .orElse(false);
+        return false; // Always false since activation removed
     }
 
     public boolean isAccountActive(String email) {
-        return profileRepository.findByEmail(email)
-                .map(ProfileEntity::getIsActive)
-                .orElse(false);
+        // ✅ Always return TRUE now
+        return true;
     }
 
     public ProfileEntity getCurrentProfile() {
@@ -92,26 +89,22 @@ public class ProfileService {
         ProfileEntity currentUser = null;
         if (email == null) {
             currentUser = getCurrentProfile();
-        }else {
+        } else {
             currentUser = profileRepository.findByEmail(email)
                     .orElseThrow(() -> new UsernameNotFoundException("Profile not found with email: " + email));
         }
-
-        return ProfileDTO.builder()
-                .id(currentUser.getId())
-                .fullName(currentUser.getFullName())
-                .email(currentUser.getEmail())
-                .profileImageUrl(currentUser.getProfileImageUrl())
-                .createdAt(currentUser.getCreatedAt())
-                .updatedAt(currentUser.getUpdatedAt())
-                .build();
+        return toDTO(currentUser);
     }
 
     public Map<String, Object> authenticateAndGenerateToken(AuthDTO authDTO) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authDTO.getEmail(), authDTO.getPassword()));
-            //Generate JWT token
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authDTO.getEmail(), authDTO.getPassword())
+            );
+
+
             String token = jwtUtil.generateToken(authDTO.getEmail());
+
             return Map.of(
                     "token", token,
                     "user", getPublicProfile(authDTO.getEmail())
@@ -121,5 +114,3 @@ public class ProfileService {
         }
     }
 }
-
-
