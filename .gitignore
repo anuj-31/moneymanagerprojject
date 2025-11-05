@@ -14,9 +14,9 @@ target/
 .env
 *.properties
 *.yml
-*.application.properties
-*.application.yml
-*.application-prod.properties
+#*.application.properties
+#*.application.yml
+#*.application-prod.properties
 
 # -------------------
 # IDEs
